@@ -1,7 +1,16 @@
 let mosca = require('mosca');
  
+let TOPIC = 'iot/water';
+var SECURE_KEY = __dirname + '/ca/server.key';
+var SECURE_CERT = __dirname + '/ca/server.crt';
+
 let settings = {
-  port: 1883
+  port: 1883,
+  secure : {
+    port: 8443,
+    keyPath: SECURE_KEY,
+    certPath: SECURE_CERT,
+  }
 };
  
 let server = new mosca.Server(settings);
@@ -16,12 +25,12 @@ let authenticate = function(client, username, password, callback) {
 }
 
 let authorizePublish = function(client, topic, payload, callback) {
-  auth = topic == 'iot/water' && client.user == 'alice';
+  auth = topic == TOPIC && client.user == 'alice';
   callback(null, auth);
 }
 
 let authorizeSubscribe = function(client, topic, callback) {
-  auth = topic == 'iot/water' && client.user == 'bob';
+  auth = topic == TOPIC && client.user == 'bob';
   callback(null, auth);
 }
 
