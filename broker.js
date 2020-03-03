@@ -1,11 +1,10 @@
-let mosca = require('mosca');
- 
-let TOPIC = 'iot/water';
-var SECURE_KEY = __dirname + '/ca/server.key';
+let TOPIC       = 'iot/water';
+var SECURE_KEY  = __dirname + '/ca/server.key';
 var SECURE_CERT = __dirname + '/ca/server.crt';
 
+let mosca = require('mosca');
+ 
 let settings = {
-  port: 1883,
   secure : {
     port: 8443,
     keyPath: SECURE_KEY,

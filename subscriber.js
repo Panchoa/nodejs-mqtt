@@ -1,5 +1,5 @@
-let TOPIC = 'iot/water'
-let PORT = process.argv[2]
+let TOPIC    = 'iot/water'
+let PORT     = process.argv[2]
 let USERNAME = process.argv[3]
 let PASSWORD = process.argv[4]
 
