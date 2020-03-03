@@ -2,8 +2,8 @@ let TOPIC = 'iot/water'
 let mqtt = require('mqtt')
 
 let client = mqtt.connect('mqtt://localhost:1883', {
-    username: 'alice',
-    password: 'azerty'
+    username: process.argv[2],
+    password: process.argv[3]
 });
 
 let n = 0;
