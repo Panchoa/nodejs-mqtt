@@ -1,35 +1,38 @@
-let TOPIC       = 'iot/water';
-var SECURE_KEY  = __dirname + '/ca/server.key';
-var SECURE_CERT = __dirname + '/ca/server.crt';
-
-let mosca = require('mosca');
+const TOPIC       = 'iot/water';
+const SECURE_KEY  = __dirname + '/ca/server.key';
+const SECURE_CERT = __dirname + '/ca/server.crt';
+const PUBLISHER_USERNAME = process.argv[2].split(':')[0]
+const PUBLISHER_PASSWORD = process.argv[2].split(':')[1]
+const SUBSCRIBER_USERNAME = process.argv[3].split(':')[0]
+const SUBSCRIBER_PASSWORD = process.argv[3].split(':')[1]
  
-let settings = {
+const settings = {
   secure : {
     port: 8443,
     keyPath: SECURE_KEY,
     certPath: SECURE_CERT,
   }
 };
- 
+
+let mosca = require('mosca');
 let server = new mosca.Server(settings);
 
 let authenticate = function(client, username, password, callback) {
   let authorized = (
-    (username === 'alice' && password.toString() === 'azerty') || 
-    (username === 'bob' && password.toString() === 'qwerty')
+    (username === PUBLISHER_USERNAME && password.toString() === PUBLISHER_PASSWORD) || 
+    (username === SUBSCRIBER_USERNAME && password.toString() === SUBSCRIBER_PASSWORD)
   );
   if (authorized) client.user = username;
   callback(null, authorized);
 }
 
 let authorizePublish = function(client, topic, payload, callback) {
-  auth = topic == TOPIC && client.user == 'alice';
+  auth = topic == TOPIC && client.user == PUBLISHER_USERNAME;
   callback(null, auth);
 }
 
 let authorizeSubscribe = function(client, topic, callback) {
-  auth = topic == TOPIC && client.user == 'bob';
+  auth = topic == TOPIC && client.user == SUBSCRIBER_USERNAME;
   callback(null, auth);
 }
 
